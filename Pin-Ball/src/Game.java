@@ -5,7 +5,8 @@ import java.util.Timer;
 public class Game
 {
 	
-	private int secondsPassed = 0;
+	
+	private int secondsPassed = 0, p1Wins = 0, p2Wins = 0, p1Score = 0, p2Score = 0, pot = 0;
 	private Timer timer = new Timer(); // game timer that pretty much controls E V E R Y T H I N G
 	
 	private TimerTask fps = new TimerTask() // basic game controls which alters fps and checks user input
@@ -19,21 +20,28 @@ public class Game
 			secondsPassed ++;
 		}
 	
-	private TimerTask reset = new TimerTask() // resets game at round end (2:00) and also checks for winner
+	private TimerTask reset = new TimerTask() // resets game at round end (2:00) and also checks for winner and adds to player score
 		public void run() {
 			
+			if (p1Score > p2Score)
+				p1Wins++;
+			else if (p2Score > p1Score)
+				p2Wins++;
+			
+			if (p1Wins = 2 || p2Wins = 2)
+				
 		}
 		
 	public void init()
 	{
-		JFrame f = new JFrame("Pinball VS");
-		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		Container c = f.getContentPane();
+		JFrame startup = new JFrame("Pinball VS");
+		startup.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		Container c = startup.getContentPane();
 		c.setBackground(Color.GRAY);
 		Dimension d = new Dimension(200,500);
 		c.setPreferredSize(d);
-		f.setResizable(false);
-		f.setVisible(true);
+		startup.setResizable(false);
+		startup.setVisible(true);
 	}
 	
 	public void start()
@@ -41,6 +49,7 @@ public class Game
 		timer.scheduleAtFixedRate(fps,17);
 		timer.scheduleAtFixedRate(secondCounter,1000);
 		timer.scheduleAtFixedRate(reset,);
+		
 	}
 	
 	
@@ -52,8 +61,6 @@ public class Game
 	public void update()
 	{
 		
-	}
-	
 	}
 
 	public void end()
