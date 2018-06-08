@@ -6,13 +6,13 @@ import java.util.Scanner;
 
 public class FileStreaming {
 	
-     FileWriter outputStream = null;
+	 FileWriter outputStream = null;
      
      File file = new File("Highscores.txt");
      outputStream = new FileWriter(file);
      Scanner sc = new Scanner(file);
      
-     public void writer(String name, int score)
+     public static void writer(String name, int score)
      {
     	 reader();
     	 do
@@ -88,7 +88,7 @@ public class FileStreaming {
     	 }
      }
      
-     public void reader()
+     public static void reader()
      {
     	 int score[];
     	 String name[];
@@ -105,7 +105,7 @@ public class FileStreaming {
     			 break;
     	 }
      }
-     pubic void writeForLoop(String name[]; int score[])
+     public void writeForLoop(String name[]; int score[])
      {
     	 for(int i = 0; i < 10; i++)
     	 {

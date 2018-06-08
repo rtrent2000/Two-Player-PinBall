@@ -5,5 +5,8 @@ public class Main extends FileStreaming {
 		String name = "Ryan";
 		int score = 1000000;
 		writer(name, score);
+		
+		reader();
+		System.out.print(name[] + score[]);
 	}
 }
