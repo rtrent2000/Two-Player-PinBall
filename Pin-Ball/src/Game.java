@@ -55,6 +55,7 @@ public class Game
 	        timer.scheduleAtFixedRate(secondCounter,(long)1000,(long)1000);
 	        //timer.scheduleAtFixedRate(reset,);
 	        paint();
+	        asdfasdf
 	        
 	        
 	    }
