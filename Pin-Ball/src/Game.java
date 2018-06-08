@@ -6,7 +6,7 @@ import java.util.Timer;
 
 public class Game
 {
-	 private static int secondsPassed = 0, p1Wins = 0, p2Wins = 0, p1Score = 0, p2Score = 0, pot = 0;
+		private static int secondsPassed = 0, p1Wins = 0, p2Wins = 0, p1Score = 0, p2Score = 0, pot = 0;
 	    private static Timer timer = new Timer(); // game timer that pretty much controls E V E R Y T H I N G
 	    
 	    private static TimerTask fps = new TimerTask(){ // basic game controls which alters fps and checks user input
@@ -38,7 +38,7 @@ public class Game
 	        }
 	    };
 	    
-	    public static void init()
+	    public static void main(String[] args)
 	    {
 	        JFrame startup = new JFrame("Pinball VS");
 	        startup.setSize(500,700);
