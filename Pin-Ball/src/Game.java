@@ -15,6 +15,7 @@ public class Game extends Applet implements Runnable
 	private Graphics doubleG;
 	private Dimension d = new Dimension(1366,768);
 	private Label timer = new Label("" + secondsPassed);
+	private Ball ball = new Ball();
 	
 
 	public void init()
@@ -74,8 +75,8 @@ public class Game extends Applet implements Runnable
 		}, (long)1000, (long)1000);
 		
 		while(true) {
-			x += dx;
-			y += dy;
+			x = ball.moveX();
+			y = ball.moveY();
 			repaint();
 			try {
 				Thread.sleep(17);
