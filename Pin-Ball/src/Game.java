@@ -1,100 +1,130 @@
-import javax.swing.*;
+import java.applet.Applet;
 import java.awt.*;
 import java.awt.Graphics;
 import java.awt.event.*;
-import java.awt.Color;
-import java.util.*;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.awt.Color;
 
-public class Game extends JApplet
+public class Game extends Applet implements Runnable
 {
-		private static int secondsPassed = 0, p1Wins = 0, p2Wins = 0, p1Score = 0, p2Score = 0, pot = 0;
-	    private static Timer timer = new Timer(); // game timer that pretty much controls E V E R Y T H I N G
-	    
-	    private static TimerTask fps = new TimerTask(){ // basic game controls which alters fps and checks user input
-	        public void run() {
-	            repaint();
-	            //check user input
-	        }
-	    };
-	    
-	    private static TimerTask secondCounter = new TimerTask()
-	    {// counts seconds passed in game
-	        public void run() {
-	            secondsPassed ++;
-	        }
-	    };
-	    
-	    private static TimerTask reset = new TimerTask()
-	    { // resets game at round end (2:00) and also checks for winner and adds to player score
-	        public void run() 
-	        {
-	            if (p1Score > p2Score)
-	                p1Wins++;
-	            else if (p2Score > p1Score)
-	                p2Wins++;
-	            
-	            if ((p1Wins == 2) || (p2Wins == 2))
-	                end();
-	        }
-	    };
-	    
-	    public static void main(String[] args)
-	    {
-	        JFrame startup = new JFrame("Pinball VS");
-	        startup.setSize(500,700);
-	        startup.setResizable(false);
-	        startup.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        
-	        
-	        JButton start = new JButton("Start!");
-	        start.addActionListener(new ActionListener()
-	        {
-	            public void actionPerformed (ActionEvent e)
-	            {
-	                start();
-	            }
-	        });
-	        
-	        JPanel panel = new JPanel();
-	        startup.add(panel);
-	        JLabel label = new JLabel("PINBALL VS");
-	        panel.setBackground(Color.BLACK);
-	        panel.add(label);
-	        panel.add(start);
-	        startup.setVisible(true);
-	        
-	        // lets put highscores here
-	    }
-	    
-	    public void start()
-	    {
-	        timer.scheduleAtFixedRate(fps,(long)17,(long)17);
-	        timer.scheduleAtFixedRate(secondCounter,(long)1000,(long)1000);
-	        timer.scheduleAtFixedRate(reset,120000,120000);
-	        JFrame game = new JFrame("Pinball VS");
-	        JPanel panel = new JPanel();
-	        game.setSize(1366,768);
-	        game.setResizable(false);
-	        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        game.setVisible(true);
-	    }
-	    
-	    
-	    public void paint(Graphics g)
-	    {
-	    	super.paint(g);
-	    	g.fillOval(x-radius,y-radius,radius*2,radius*2);
-	    }
-	    
-	    public void update()
-	    {
-	        
-	    }
+	private static int x = -50, y = -50, dx = 1, dy = 1, radius = 20, 
+	secondsPassed = 180, seconds, minutes = 3,
+	pot = 0, width = 1366, height = 768;
+	private Image i;
+	private Graphics doubleG;
+	private Dimension d = new Dimension(1366,768);
+	private Label timer = new Label("" + secondsPassed);
+	
 
-	    private static void end()
+	public void init()
+	{   
+
+	}
+	    
+	public void start()
+	{
+		setSize(300,700);
+		setBackground(Color.BLUE);
+		Thread thread = new Thread(this);
+		Label title = new Label("Pinball VS");
+		Button button1 =  new Button("Start!");
+		button1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e)
+			{
+				remove(title);
+				remove(button1);
+				setSize(d);
+				setBackground(Color.BLACK);
+				x = 50;
+				y = 50;
+				thread.start();
+			}});
+		add(title);
+		add(button1);
+	} 
+	    
+	public void run()
+	{
+		Timer gameTimer = new Timer();
+		
+		gameTimer.schedule(new TimerTask()
+		{
+			@Override
+			public void run() 
+			{
+				// TODO Auto-generated method stub
+				x = width / 2;
+				y = height / 2;
+				dx = 0;
+				dy = 0;
+			}
+		}, (long)180000);
+		
+		gameTimer.scheduleAtFixedRate(new TimerTask()
+		{
+			@Override
+			public void run() 
+			{
+				// TODO Auto-generated method stub
+				secondsPassed --;
+				minutes = secondsPassed / 60;
+				seconds = secondsPassed % 60;
+			}
+		}, (long)1000, (long)1000);
+		
+		while(true) {
+			x += dx;
+			y += dy;
+			repaint();
+			try {
+				Thread.sleep(17);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}  	
+	}
+	    
+	public void paint(Graphics g)
+	{
+		g.setColor(Color.GRAY);
+	    g.fillOval(x-radius,y-radius,radius*2,radius*2);
+	    g.setColor(Color.PINK);
+	    g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
+	    if (secondsPassed % 60 == 0)
+	    	g.drawString("" + minutes + ":" + "00", width/2,20);
+	    else if (seconds != 10 && seconds / 10 == 0)
+	    	g.drawString("" + minutes + ":" + "0" + seconds, width/2,20);
+	    else
+	    	g.drawString("" + minutes + ":" + seconds, width/2,20);
+	}
+	    
+	public void update(Graphics g)
+	{
+	    if(i == null)
 	    {
-	        
+	    	i = createImage(this.getSize().width, this.getSize().height);
+	    	doubleG = i.getGraphics();
 	    }
 	    
+	    doubleG.setColor(getBackground());
+	    doubleG.fillRect(0,0,this.getSize().width,this.getSize().height);
+	    doubleG.setColor(getForeground());
+	    paint(doubleG);
+	    
+	    g.drawImage(i,0,0,this);
+	}
+
+	public void stop()
+	{
+	        
+	}
+	    
+	public void destroy()
+	{
+	    	
+	}
+
+	
 }
