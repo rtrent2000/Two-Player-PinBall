@@ -59,7 +59,7 @@ public class Game extends Applet implements Runnable
 				dx = 0;
 				dy = 0;
 			}
-		}, (long)180000);
+		},(long)180000);
 		
 		gameTimer.scheduleAtFixedRate(new TimerTask()
 		{
