@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Ball
 {
-		private final int XGRAV = -2;
+		private final int XGRAV = -1;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
 	    //private ArrayList<Rectangle> obstacles;
 	    private Rectangle circleRectangle;
@@ -32,7 +32,7 @@ public class Ball
 			        dx += xGrav;
 				}
 	    		
-	    	}, (long)100, (long)100);
+	    	}, (long)150, (long)150);
 	       x = x1;
 	       y = y1; 
 	       dx = 0;

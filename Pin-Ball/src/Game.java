@@ -10,11 +10,11 @@ public class Game extends Applet implements Runnable
 {
 	private static int x = -50, y = -50, dx = 1, dy = 1, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
-	pot = 0;
+	pot = 10;
 	private static final int WIDTH = 1366, HEIGHT = 768;
 	private Image i;
 	private Graphics doubleG;
-	private Dimension d = new Dimension(WIDTH,HEIGHT);
+	private Dimension d = new Dimension(WIDTH,HEIGHT), goalDimension = new Dimension(40, 80);
 	private Label timer = new Label("" + secondsPassed);
 	private Ball ball;
 	private Thread thread = new Thread(this);
@@ -92,8 +92,14 @@ public class Game extends Applet implements Runnable
 	    	g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
 	    else
 	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
+	    g.setColor(Color.RED);
+	    g.drawRect(1326, 344, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    g.drawRect(0, 344, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
 	    g.setColor(Color.BLUE);
-	    g.fillOval((WIDTH/2)-50, (HEIGHT/2)-50, 100, 100);
+	    g.fillRect(1326, 424, 40, 344);
+	    g.fillRect(1326, 0, 40, 354);
+	    g.fillRect(0, 424, 40, 344);
+	    g.fillRect(0, 0, 41, 354);
 	}
 	    
 	public void update(Graphics g)
@@ -115,6 +121,7 @@ public class Game extends Applet implements Runnable
 	@SuppressWarnings("deprecation")
 	public void stop()
 	{
+		seconds = 0;
 		thread.stop();
 	}
 	    
