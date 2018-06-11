@@ -2,16 +2,19 @@ import java.awt.Rectangle;
 
 public class Ball
 {
-
-
-		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768;
-	    private final int radius =  20 , xGrav =  2;
+		private final int XGRAV = -1;
+		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
 	    //private ArrayList<Rectangle> obstacles;
 	    private Rectangle circleRectangle;
-	    public Ball()//ArrayList<Rectangle> poops)
+	    
+	    
+	    
+	    
+	    
+	    public Ball(int radius, int x1, int y1)//ArrayList<Rectangle> poops)
 	    {
-	       x =50;
-	       y =25; 
+	       x = x1;
+	       y = y1; 
 	       dx = 10;
 	       dy = 10;
 	      // obstacles = poops;
@@ -30,50 +33,50 @@ public class Ball
 	    
 	    
 	    
-	    public int moveX()
+	    public void moveX()
 	    {
+	    	
+	        //if(x > frameWidth/ 2 )
+	        //{
+	       // 	xGrav += -XGRAV;
+	     //   }
+	        //xGrav 
 	        
 	        if(x+ dx > frameWidth- radius)    //if the ball hits the right side of the board
 	        {
 	            x =frameWidth - radius -1;
 	            dx =-dx; 
-	            return x;
+	            
 	        }
-	        
 	        else if(x+dx < 0)
 	        {        
 	            
 	            dx = -dx;
 	            x = radius;
-	            return x;
-	            //f(x < frame.getWidth()/2 )
 	        }    
-	        
-	        return x + dx;
+	        x += dx;
 	    }
 	    
 	    
-	    public int moveY()
+	    public void moveY()
 	    {
 	        
 	        
-	            
-	       if(y+ dy > frameHeight- radius)   
+	         
+	       if(y+ dy > frameHeight- radius -1)   
 	        {
 	            y =frameHeight - radius -1;
 	            dy =-dy;    
-	            return y;
 	        }
 	        
 	        else if(y+dy < 0)
 	        {        
 	            y = radius;
 	            dy = -dy;
-	            return y;
 	            //f(x < frame.getWidth()/2 )
 	        }     
 	        
-	        return y + dy;
+	        y += dy;
 	    }
 	    
 	    
@@ -105,5 +108,4 @@ public class Ball
 	
 	
 	
-	
-}
+
