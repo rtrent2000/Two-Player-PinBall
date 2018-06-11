@@ -10,20 +10,15 @@ public class Game extends Applet implements Runnable
 {
 	private static int x = -50, y = -50, dx = 1, dy = 1, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
-	pot = 0, width = 1366, height = 768;
+	pot = 0;
+	private static final int WIDTH = 1366, HEIGHT = 768;
 	private Image i;
 	private Graphics doubleG;
-	private Dimension d = new Dimension(1366,768);
+	private Dimension d = new Dimension(WIDTH,HEIGHT);
 	private Label timer = new Label("" + secondsPassed);
 	private Ball ball;
 	private Thread thread = new Thread(this);
 	
-
-	public void init()
-	{   
-
-	}
-	    
 	public void start()
 	{
 		setSize(300,700);
@@ -37,8 +32,8 @@ public class Game extends Applet implements Runnable
 				remove(button1);
 				setSize(d);
 				setBackground(Color.BLACK);
-				x = 5 + radius;
-				y = 768 - radius;
+				x = WIDTH/2 + 10;
+				y = HEIGHT/2;
 				ball = new Ball(radius,x,y);
 				thread.start();
 			}});
@@ -73,10 +68,8 @@ public class Game extends Applet implements Runnable
 		}, (long)1000, (long)1000);
 		
 		while(true) {
-			ball.moveX();
-			ball.moveY();
-			x += ball.getDX();
-			y += ball.getDY();
+			x = ball.moveX();
+			y = ball.moveY();
 			repaint();
 			try {
 				Thread.sleep(17);
@@ -94,13 +87,13 @@ public class Game extends Applet implements Runnable
 	    g.setColor(Color.PINK);
 	    g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
 	    if (secondsPassed % 60 == 0)
-	    	g.drawString("" + minutes + ":" + "00", width/2 - 20,20);
+	    	g.drawString("" + minutes + ":" + "00", WIDTH/2 - 20,20);
 	    else if (seconds != 10 && seconds / 10 == 0)
-	    	g.drawString("" + minutes + ":" + "0" + seconds, width/2 - 20,20);
+	    	g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
 	    else
-	    	g.drawString("" + minutes + ":" + seconds, width/2 - 20,20);
+	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
 	    g.setColor(Color.BLUE);
-	    g.fillOval((width/2)-50, (height/2)-50, 100, 100);
+	    g.fillOval((WIDTH/2)-50, (HEIGHT/2)-50, 100, 100);
 	}
 	    
 	public void update(Graphics g)
