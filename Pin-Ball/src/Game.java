@@ -10,24 +10,19 @@ public class Game extends Applet implements Runnable
 {
 	private static int x = -50, y = -50, dx = 1, dy = 1, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
-	pot = 0, width = 1366, height = 768;
+	pot = 10;
+	private static final int WIDTH = 1366, HEIGHT = 768;
 	private Image i;
 	private Graphics doubleG;
-	private Dimension d = new Dimension(1366,768);
+	private Dimension d = new Dimension(WIDTH,HEIGHT), goalDimension = new Dimension(40, 80);
 	private Label timer = new Label("" + secondsPassed);
-	private Ball ball = new Ball();
+	private Ball ball;
+	private Thread thread = new Thread(this);
 	
-
-	public void init()
-	{   
-
-	}
-	    
 	public void start()
 	{
 		setSize(300,700);
 		setBackground(Color.BLUE);
-		Thread thread = new Thread(this);
 		Label title = new Label("Pinball VS");
 		Button button1 =  new Button("Start!");
 		button1.addActionListener(new ActionListener(){
@@ -37,8 +32,9 @@ public class Game extends Applet implements Runnable
 				remove(button1);
 				setSize(d);
 				setBackground(Color.BLACK);
-				x = 50;
-				y = 50;
+				x = WIDTH/2 + 10;
+				y = HEIGHT/2;
+				ball = new Ball(radius,x,y);
 				thread.start();
 			}});
 		add(title);
@@ -54,13 +50,10 @@ public class Game extends Applet implements Runnable
 			@Override
 			public void run() 
 			{
-				// TODO Auto-generated method stub
-				x = width / 2;
-				y = height / 2;
-				dx = 0;
-				dy = 0;
+				// TODO Auto-generated method stub\
+				stop();
 			}
-		},(long)180000);
+		},(long)190000);
 		
 		gameTimer.scheduleAtFixedRate(new TimerTask()
 		{
@@ -94,11 +87,19 @@ public class Game extends Applet implements Runnable
 	    g.setColor(Color.PINK);
 	    g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
 	    if (secondsPassed % 60 == 0)
-	    	g.drawString("" + minutes + ":" + "00", width/2,20);
+	    	g.drawString("" + minutes + ":" + "00", WIDTH/2 - 20,20);
 	    else if (seconds != 10 && seconds / 10 == 0)
-	    	g.drawString("" + minutes + ":" + "0" + seconds, width/2,20);
+	    	g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
 	    else
-	    	g.drawString("" + minutes + ":" + seconds, width/2,20);
+	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
+	    g.setColor(Color.RED);
+	    g.drawRect(1326, 344, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    g.drawRect(0, 344, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    g.setColor(Color.BLUE);
+	    g.fillRect(1326, 424, 40, 344);
+	    g.fillRect(1326, 0, 40, 354);
+	    g.fillRect(0, 424, 40, 344);
+	    g.fillRect(0, 0, 41, 354);
 	}
 	    
 	public void update(Graphics g)
@@ -117,9 +118,11 @@ public class Game extends Applet implements Runnable
 	    g.drawImage(i,0,0,this);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void stop()
 	{
-	        
+		seconds = 0;
+		thread.stop();
 	}
 	    
 	public void destroy()
