@@ -1,5 +1,7 @@
 import java.awt.Rectangle;
 import java.util.*;
+import sun.audio.*;
+import java.io.*;
 
 public class Ball
 {
@@ -61,11 +63,13 @@ public class Ball
 	        {
 	            x = frameWidth - radius -1;
 	            dx =-dx;
+	            //sound();
 	        }
 	        else if(x+dx < 0)
 	        {        
 	            dx = -dx;
 	            x = radius;
+	            //sound();
 	        }    
 	        x += dx;
 	        return x;
@@ -80,13 +84,15 @@ public class Ball
 	       if(y+ dy > frameHeight- radius -1)   
 	        {
 	            y = frameHeight - radius -1;
-	            dy =-dy;    
+	            dy =-dy;
+	            //sound();
 	        }
 	        
 	        else if(y+dy < 0)
 	        {        
 	            y = radius;
 	            dy = -dy;
+	            //sound();
 	            //f(x < frame.getWidth()/2 )
 	        }     
 	        
@@ -109,6 +115,11 @@ public class Ball
 	     //   }
 	    
 	    //}
+	    
+	    /*public static void sound()
+	    {
+	    	
+	    }*/
 	}
 
 
