@@ -1,11 +1,10 @@
 import java.awt.Rectangle;
 import java.util.*;
-import sun.audio.*;
 import java.io.*;
 
 public class Ball
 {
-		private final int XGRAV = -1;
+		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
 	    //private ArrayList<Rectangle> obstacles;
 	    private Rectangle circleRectangle;
@@ -79,13 +78,19 @@ public class Ball
 	        {
 	            x = frameWidth - radius -1;
 	            dx =-dx;
-	            //sound();
+	            if (dx < 0)
+	            	dx += DEC;
+	            else if (dx > 0)
+	            	dx -= DEC;
 	        }
 	        else if(x+dx < 0)
 	        {        
 	            dx = -dx;
 	            x = radius;
-	            //sound();
+	            if (dx < 0)
+	            	dx += DEC;
+	            else if (dx > 0)
+	            	dx -= DEC;
 	        }    
 	        x += dx;
 	        return x;
@@ -101,14 +106,20 @@ public class Ball
 	        {
 	            y = frameHeight - radius -1;
 	            dy =-dy;
-	            //sound();
+	            if (dy < 0)
+	            	dy += DEC;
+	            else if (dy > 0)
+	            	dy -= DEC;
 	        }
 	        
 	        else if(y+dy < 0)
 	        {        
 	            y = radius;
 	            dy = -dy;
-	            //sound();
+	            if (dy < 0)
+	            	dy += DEC;
+	            else if (dy > 0)
+	            	dy -= DEC;
 	            //f(x < frame.getWidth()/2 )
 	        }     
 	        

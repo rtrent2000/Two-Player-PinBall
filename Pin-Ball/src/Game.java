@@ -9,22 +9,40 @@ import java.util.Scanner;
 public class Game extends Applet implements Runnable
 {
 	private static int x = -50, y = -50, dx = 1, dy = 1, radius = 20, 
-	secondsPassed = 180, seconds, minutes = 3,
-	pot = 10;
+	secondsPassed = 180, seconds, minutes = 2,
+	pot = 10, angle = -10, inc = 3;
 	private static final int WIDTH = 1366, HEIGHT = 768;
 	private Image i;
 	private Graphics doubleG;
 	private Dimension d = new Dimension(WIDTH,HEIGHT), goalDimension = new Dimension(0,0);
 	private Label timer = new Label("" + secondsPassed);
 	private Ball ball;
-	private Thread thread = new Thread(this);
-	private boolean RTP = false,RTPM = false, RBP = false,RBPM = false, LTP = false,LTPM = false, LBP = false, LBPM = false;
+	private Thread thread = new Thread(this), paddle = new Thread() {
+		public void run()
+		{
+			while(true) {		
+				angle += inc;
+				if (angle >= 30)
+				{
+					inc *= -1;
+				}
+				else if(angle == -10 && inc < 0)
+				{
+					inc *= -1;
+					paddle.stop();
+				}
+				try {
+					Thread.sleep(17);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}  	
+		}
+	};
 	private Scanner sc = new Scanner(System.in);
-	private Timer paddles = new Timer();
-	private Paddle LT = new Paddle(40, 294, 20, 65), LB = new Paddle(40, 294 + (int)goalDimension.getHeight()+ 135, 20, 65),
-	RT = new Paddle(1366 -  60, 294, 20, 65), RB = new Paddle(1366 - 60, 294 + (int)goalDimension.getHeight() +135, 20, 65);
-	
-	//FIGURE OUT A WAY TO USE GRAPHICS 2D FOR PADDLES AND JUST PADDLES
+	private Paddle LT = new Paddle(40, 294, 20, 73), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 135, 20, 73),
+	RT = new Paddle(1366 -  60, 294, 20, 73), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +135, 20, 73);
 
 	public void start()
 	{
@@ -44,6 +62,7 @@ public class Game extends Applet implements Runnable
 				goalDimension = new Dimension(40, 200);
 				ball = new Ball(radius,x,y);
 				thread.start();
+				paddle.start();
 			}});
 		add(title);
 		add(button1);
@@ -120,22 +139,22 @@ public class Game extends Applet implements Runnable
 	    
 	    //paddles rotate test
 	    AffineTransform old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(-30),LT.getX() + LT.getWidth(), LT.getY());
+        g2d.rotate(Math.toRadians(-angle),LT.getX() + LT.getWidth(), LT.getY());
         g2d.fillRect((int) LT.getX(),(int) LT.getY(),(int) LT.getWidth(),(int) LT.getHeight());
         g2d.setTransform(old);
         
         old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(30),LB.getX() + LB.getWidth(), LB.getY() + LB.getHeight());
+        g2d.rotate(Math.toRadians(angle),LB.getX() + LB.getWidth(), LB.getY() + LB.getHeight());
         g2d.fillRect((int) LB.getX(),(int) LB.getY(),(int) LB.getWidth(),(int) LB.getHeight());
         g2d.setTransform(old);
         
         old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(30),RT.getX(), RT.getY());
+        g2d.rotate(Math.toRadians(angle),RT.getX(), RT.getY());
         g2d.fillRect((int) RT.getX(),(int) RT.getY(),(int) RT.getWidth(),(int) RT.getHeight());
         g2d.setTransform(old);
         
         old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(-30),RB.getX(), RB.getY() + RB.getHeight());
+        g2d.rotate(Math.toRadians(-angle),RB.getX(), RB.getY() + RB.getHeight());
         g2d.fillRect((int) RB.getX(),(int) RB.getY(),(int) RB.getWidth(),(int) RB.getHeight());
         g2d.setTransform(old);
         
@@ -190,8 +209,7 @@ public class Game extends Applet implements Runnable
 	    switch (key){
 	        case "a":
 	        case "A":
-	            LTP = true;
-	            LTPM = true;
+	            paddle.start();
 	            break;
 	        case "d":
 	        case "D":
