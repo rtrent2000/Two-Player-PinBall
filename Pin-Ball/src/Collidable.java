@@ -1,7 +1,7 @@
 
 public interface Collidable 
 {
-
-	public boolean  collides();
+	
+	public boolean  collides(Ball b);
 	
 }
