@@ -1,17 +1,14 @@
+import java.awt.Rectangle;
 
-public class GUI 
+public class GUI extends Rectangle implements Collidable
 {
 
-	private int x, y, height, width, angle;
+	private int angle;
 	
 	public GUI(int topLeftX, int topLeftY, int w, int h)
 	{
-		x = topLeftX;
-		y = topLeftY;
-		width =w;
-		height = h;
+		super(topLeftX,topLeftY,w,h);
 	}
-	
 	
 	public boolean collides(Ball b)
 	{

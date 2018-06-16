@@ -18,9 +18,11 @@ public class Game extends Applet implements Runnable
 	private Label timer = new Label("" + secondsPassed);
 	private Ball ball;
 	private Thread thread = new Thread(this);
-	private boolean RTP = false,RTPM = false, RBP = false,RBPM = false, LTP = false,LTPM = false, LBP = false, LBPM = false, reset = true;
+	private boolean RTP = false,RTPM = false, RBP = false,RBPM = false, LTP = false,LTPM = false, LBP = false, LBPM = false;
 	private Scanner sc = new Scanner(System.in);
 	private Timer paddles = new Timer();
+	private Paddle LT = new Paddle(40, 294, 20, 65), LB = new Paddle(40, 294 + (int)goalDimension.getHeight()+ 135, 20, 65),
+	RT = new Paddle(1366 -  60, 294, 20, 65), RB = new Paddle(1366 - 60, 294 + (int)goalDimension.getHeight() +135, 20, 65);
 	
 	//FIGURE OUT A WAY TO USE GRAPHICS 2D FOR PADDLES AND JUST PADDLES
 
@@ -107,33 +109,37 @@ public class Game extends Applet implements Runnable
 	    
 	    //goal barriers
 	    g.setColor(Color.BLUE);
-	    g.fillRect(1326, 0, 40, 295);
-	    g.fillRect(1326, 294 + (int)goalDimension.getHeight(), 40, 294);
-	    g.fillRect(0, 0, 40,295);
-	    g.fillRect(0, 294 + (int)goalDimension.getHeight(), 41, 294);
+	    g.fillRect(1306, 0, 60, 295);
+	    g.fillRect(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
+	    g.fillRect(0, 0, 60,295);
+	    g.fillRect(0, 294 + (int)goalDimension.getHeight(), 61, 294);
 	    
 	    //paddles
-	    
+	    Graphics2D g2d = (Graphics2D)g;
 	    g.setColor(Color.WHITE);
-	    g.fillRect(40, 294, 20, 65);
-	    AffineTransform oldLTP = ((Graphics2D) g).getTransform();
-        ((Graphics2D) g).rotate(Math.toRadians(45));
-        ((Graphics2D) g).setTransform(oldLTP);
+	    
+	    //paddles rotate test
+	    AffineTransform old = g2d.getTransform();
+        g2d.rotate(Math.toRadians(-30),LT.getX() + LT.getWidth(), LT.getY());
+        g2d.fillRect((int) LT.getX(),(int) LT.getY(),(int) LT.getWidth(),(int) LT.getHeight());
+        g2d.setTransform(old);
         
-	    g.fillRect(40, 294 + (int)goalDimension.getHeight()-65, 20, 65);
-	    AffineTransform oldLBP = ((Graphics2D) g).getTransform();
-        ((Graphics2D) g).rotate(Math.toRadians(45));
-        ((Graphics2D) g).setTransform(oldLBP);
+        old = g2d.getTransform();
+        g2d.rotate(Math.toRadians(30),LB.getX() + LB.getWidth(), LB.getY() + LB.getHeight());
+        g2d.fillRect((int) LB.getX(),(int) LB.getY(),(int) LB.getWidth(),(int) LB.getHeight());
+        g2d.setTransform(old);
         
-	    g.fillRect(1366 - 60, 294, 20, 65);
-	    AffineTransform oldRTP = ((Graphics2D) g).getTransform();
-        ((Graphics2D) g).rotate(Math.toRadians(45));
-        ((Graphics2D) g).setTransform(oldRTP);
+        old = g2d.getTransform();
+        g2d.rotate(Math.toRadians(30),RT.getX(), RT.getY());
+        g2d.fillRect((int) RT.getX(),(int) RT.getY(),(int) RT.getWidth(),(int) RT.getHeight());
+        g2d.setTransform(old);
         
-	    g.fillRect(1366 - 60, 294 + (int)goalDimension.getHeight()-65, 20, 65);
-	    AffineTransform oldRBP = ((Graphics2D) g).getTransform();
-        ((Graphics2D) g).rotate(Math.toRadians(45));
-        ((Graphics2D) g).setTransform(oldRBP);
+        old = g2d.getTransform();
+        g2d.rotate(Math.toRadians(-30),RB.getX(), RB.getY() + RB.getHeight());
+        g2d.fillRect((int) RB.getX(),(int) RB.getY(),(int) RB.getWidth(),(int) RB.getHeight());
+        g2d.setTransform(old);
+        
+        //center line
 	    g.drawLine(1366/2, 0, 1366/2, 768);
 	    
 	    //ball
