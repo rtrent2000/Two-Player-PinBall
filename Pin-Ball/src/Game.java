@@ -85,15 +85,21 @@ public class Game extends Applet implements Runnable
 	    
 	public void paint(Graphics g)
 	{
+		//(xpos,ypos,xlength,ylength)
+		
+		//goals
 	    g.setColor(Color.RED);
 	    g.drawRect(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
 	    g.drawRect(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    
+	    //goal barriers
 	    g.setColor(Color.BLUE);
 	    g.fillRect(1326, 0, 40, 295);
 	    g.fillRect(1326, 294 + (int)goalDimension.getHeight(), 40, 294);
 	    g.fillRect(0, 0, 40,295);
 	    g.fillRect(0, 294 + (int)goalDimension.getHeight(), 41, 294);
 	    
+	    //paddles
 	    g.setColor(Color.WHITE);
 	    g.fillRect(40, 294, 20, 65);
 	    g.fillRect(40, 294 + (int)goalDimension.getHeight()-65, 20, 65);
@@ -101,10 +107,11 @@ public class Game extends Applet implements Runnable
 	    g.fillRect(1366 - 60, 294 + (int)goalDimension.getHeight()-65, 20, 65);
 	    g.drawLine(1366/2, 0, 1366/2, 768);
 	    
-	    
+	    //ball
 		g.setColor(Color.GRAY);
 	    g.fillOval(x-radius,y-radius,radius*2,radius*2);
 	    
+	    //timer
 	    g.setColor(Color.YELLOW);
 	    g.fillRect( WIDTH/2 - 22, 0, 40, 25);
 	    g.setColor(Color.BLACK);

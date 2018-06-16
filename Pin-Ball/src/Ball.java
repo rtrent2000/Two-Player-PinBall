@@ -13,7 +13,7 @@ public class Ball
 	    
 	    
 	    
-	    public Ball(int radius, int x1, int y1)//ArrayList<Rectangle> poops)
+	    public Ball(int radius1, int x1, int y1)//ArrayList<Rectangle> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
@@ -35,6 +35,7 @@ public class Ball
 				}
 	    		
 	    	}, (long)150, (long)150);
+	       radius = radius1;
 	       x = x1;
 	       y = y1; 
 	       dx = 0;
@@ -42,7 +43,17 @@ public class Ball
 	      // obstacles = poops;
 	       circleRectangle = new Rectangle( x - radius, y-radius, radius *2, radius *2);
 	    }
-	        
+	    
+	    public int getX()
+	    {
+	        return x;
+	    }
+	    
+	    public int getY()
+	    {           
+	        return y;
+	    }
+	    
 	    public int getDX()
 	    {
 	        return dx;
@@ -51,6 +62,11 @@ public class Ball
 	    public int getDY()
 	    {           
 	        return dy;
+	    }
+	    
+	    public int getRadius()
+	    {           
+	        return radius;
 	    }
 	    
 	    
