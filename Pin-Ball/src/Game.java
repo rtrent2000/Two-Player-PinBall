@@ -1,10 +1,11 @@
 import java.applet.Applet;
-import sun.audio.*;
 import java.awt.*;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Scanner;
+
 import java.awt.Color;
 
 public class Game extends Applet implements Runnable
@@ -19,8 +20,9 @@ public class Game extends Applet implements Runnable
 	private Label timer = new Label("" + secondsPassed);
 	private Ball ball;
 	private Thread thread = new Thread(this);
-	
-	
+	private boolean RTP = false,RTPM = false, RBP = false,RBPM = false, LTP = false,LTPM = false, LBP = false, LBPM = false;
+	private Scanner sc = new Scanner(System.in);
+
 	public void start()
 	{
 		setSize(300,700);
@@ -70,7 +72,16 @@ public class Game extends Applet implements Runnable
 			}
 		}, (long)1000, (long)1000);
 		
-		while(true) {
+		gameTimer.scheduleAtFixedRate(new TimerTask()
+		{
+			@Override
+			public void run() 
+			{
+				keyPressed(sc.next());
+			}
+		}, (long)17, (long)17);
+		
+		while(true) {		
 			x = ball.moveX();
 			y = ball.moveY();
 			repaint();
@@ -151,5 +162,31 @@ public class Game extends Applet implements Runnable
 	    	
 	}
 
-	
+	public void keyPressed(String key) {
+	    switch (key){
+	        case "a":
+	        case "A":
+	            LTP = true;
+	            LTPM = true;
+	            break;
+	        case "d":
+	        case "D":
+	        	LBP = true;
+	        	LBPM = true;
+	        	break;
+	        case "j":
+	        case "J":
+	        	RBP = true;
+	        	RBPM = true;
+	        	break;
+	        case "l":
+	        case "L":
+	        	RTP = true;
+	        	RTPM = true;
+	        	break;
+	        default:
+	        	sc = null;
+	        	break;
+	    }
+	}
 }
