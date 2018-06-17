@@ -7,12 +7,13 @@ import java.util.Scanner;
 
 public class FileStreaming {
 	
-	 private static FileWriter outputStream = null;
+	 private static FileWriter outputStream;
      
-	 private static File file = new File("Highscores.txt");
-     private static outputStream = new FileWriter(file);
-     private static Scanner sc = new Scanner(file);
-     
+	 private static File file("Highscores.txt");
+	 outputStream = file;
+	 private static Scanner sc = new Scanner(file);
+	
+	 
      private static ArrayList<Integer> scores = new ArrayList<Integer>();
 	 private static String[] names = new String[10];
      
