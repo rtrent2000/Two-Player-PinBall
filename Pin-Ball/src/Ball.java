@@ -1,8 +1,7 @@
 import java.awt.Rectangle;
 import java.util.*;
-import java.io.*;
 
-public class Ball
+public class Ball implements Collidable
 {
 		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
@@ -72,8 +71,6 @@ public class Ball
 	    
 	    public int moveX()
 	    {
-	    	
-	        
 	        if(x + dx > frameWidth - radius)    //if the ball hits the right side of the board
 	        {
 	            x = frameWidth - radius -1;
@@ -94,6 +91,8 @@ public class Ball
 	        }    
 	        x += dx;
 	        return x;
+	        
+	        
 	    }
 	    
 	    
@@ -128,20 +127,12 @@ public class Ball
 	    }
 	    
 	    
-	   // public rectangle collides()
-	    //{
+	    public void collides(GUI g)
+	    {
 	        
-	      //  for(int i = 0; i < obstacles.size() -1; i++)
-	      //  {
-	      //      if(.intersects(obstacles.get(i));)
-	      //      {
-	      //          obstacles.get(i);
-	            
-	            
-	      //      }
-	     //   }
+	      
 	    
-	    //}
+	    }
 	    
 	    /*public static void sound()
 	    {
