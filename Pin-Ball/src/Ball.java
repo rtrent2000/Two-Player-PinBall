@@ -1,16 +1,17 @@
 import java.awt.Rectangle;
 import java.util.*;
 
-public class Ball
+public class Ball implements Collidable
 {
 		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
-	    private ArrayList<Collidable> obstacles;
+	    //private ArrayList<Rectangle> obstacles;
 	    private Rectangle circleRectangle;
 	    private static Timer gravTimer;
 	    
 	    
-	    public Ball(int radius1, int x1, int y1, ArrayList<Collidable> poops)
+	    
+	    public Ball(int radius1, int x1, int y1, ArrayList<Rectangle> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
@@ -98,7 +99,6 @@ public class Ball
 	    public int moveY()
 	    {
 	        
-	        
 	         
 	       if(y+ dy > frameHeight- radius -1)   
 	        {
@@ -126,13 +126,28 @@ public class Ball
 	    }
 	    
 	    
-	    public void collides(GUI g)
+	    public void collidesTri(GUI g)
 	    {
-	        
-	      
-	    
+	    	
+	    	
+	    	
 	    }
 	    
+	    public void collidesCircle(GUI g)
+	    {
+	    	
+	    	
+	    	
+	    }
+	    
+	    public void collides(GUI g)
+	    {
+	    	if(x + radius > g.getX() || x - radius < g.getX() + g.getWidth())
+	    		dx=-dx;
+	    	else
+	    		dy=-dy;
+	    	
+	    }
 	    /*public static void sound()
 	    {
 	    	
