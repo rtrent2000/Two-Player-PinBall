@@ -3,7 +3,7 @@ public class Paddle extends GUI implements Collidable
 {
 	private int angle;
 	public Paddle(int topLeftX, int topLeftY, int w, int h) {
-		super(topLeftX, topLeftY, w, h); //add angle 
+		super(topLeftX, topLeftY, w, h); 
 		// TODO Auto-generated constructor stub
 	}
 	

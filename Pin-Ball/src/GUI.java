@@ -8,7 +8,7 @@ public class GUI extends Rectangle implements Collidable
 	private boolean isTriangle = false;
 	
 	
-	public GUI(int topLeftX, int topLeftY, int w, int h, int angle1)
+	public GUI(int topLeftX, int topLeftY, int w, int h)
 	{
 		
 		super(topLeftX,topLeftY,w,h);
@@ -21,27 +21,25 @@ public class GUI extends Rectangle implements Collidable
 		radius = radius1;
 	}
 	
-	public GUI(int x11, int x21, int y11, int y21, int width1, int height1)
+	public GUI(int x11, int x21, int y11, int y21, boolean doggo)
 	{
 		x1 = x11;
 		x2 = x21;
 		y1 = y11;
 		y2 = y21;
-		width = width1;
-		height = height1;
 		isTriangle = true;
 	}
 	
-	public boolean collides(Ball b) //rectangle
+	public void collides(Ball b) //rectangle
 	{
-		if(b.getX() < x)
+		/*if(b.getX() < x)
 		{
 			if(b.getY() < y)
-				if((b.getX() + b.getRadius() > x) && (b.getY() + b.getRadius() > y))
+				if((b.getX() + b.getRadius() >= x) && (b.getY() + b.getRadius() >= y))
 				{
 					return true;
 				}
-			else if((b.getX() + b.getRadius() > x) && (b.getY() - b.getRadius() > y + height))		
+			else if((b.getX() + b.getRadius() >= x) && (b.getY() - b.getRadius() >= y + height))		
 			{
 				return true;
 			}
@@ -49,16 +47,19 @@ public class GUI extends Rectangle implements Collidable
 		else
 		{
 			if(b.getY() < y)
-				if((b.getX() - b.getRadius() < x +width) && (b.getY() + b.getRadius() > y))
+				if((b.getX() - b.getRadius() <= x +width) && (b.getY() + b.getRadius() >= y))
 				{
 					return true;
 				}
-			else if((b.getX() - b.getRadius() < x + width) && (b.getY() - b.getRadius() > y + height))		
+			else if((b.getX() - b.getRadius() <= x + width) && (b.getY() - b.getRadius() >= y + height))		
 			{
 				return true;
 			}
 		}
-		return false;
+		return false; */
+	
+		
+		
 	}
 	
 		
@@ -125,6 +126,11 @@ public class GUI extends Rectangle implements Collidable
 	public int getY2()
 	{
 		return y2;
+	}
+	
+	public int getRadius()
+	{
+		return radius;
 	}
 	
 	public boolean getIsCircle()

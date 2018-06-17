@@ -1,17 +1,16 @@
 import java.awt.Rectangle;
 import java.util.*;
 
-public class Ball implements Collidable
+public class Ball
 {
 		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
-	    //private ArrayList<Rectangle> obstacles;
-	    private Rectangle circleRectangle;
+	    private ArrayList<GUI> obstacles;
 	    private static Timer gravTimer;
+	    private Rectangle circleRect;
 	    
 	    
-	    
-	    public Ball(int radius1, int x1, int y1, ArrayList<Rectangle> poops)
+	    public Ball(int radius1, int x1, int y1, ArrayList<GUI> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
@@ -36,10 +35,9 @@ public class Ball implements Collidable
 	       radius = radius1;
 	       x = x1;
 	       y = y1; 
-	       dx = 0;
-	       dy = 0;
-	      // obstacles = poops;
-	       circleRectangle = new Rectangle( x - radius, y-radius, radius *2, radius *2);
+	       dx = 5;
+	       dy = 5;
+	       obstacles = poops;
 	    }
 	    
 	    public int getX()
@@ -75,19 +73,19 @@ public class Ball implements Collidable
 	        {
 	            x = frameWidth - radius -1;
 	            dx =-dx;
-	            if (dx < 0)
+	           /* if (dx < 0)
 	            	dx += DEC;
 	            else if (dx > 0)
-	            	dx -= DEC;
+	            	dx -= DEC;*/
 	        }
 	        else if(x+dx < 0)
 	        {        
 	            dx = -dx;
 	            x = radius;
-	            if (dx < 0)
+	           /* if (dx < 0)
 	            	dx += DEC;
 	            else if (dx > 0)
-	            	dx -= DEC;
+	            	dx -= DEC; */
 	        }    
 	        x += dx;
 	        return x;
@@ -104,20 +102,20 @@ public class Ball implements Collidable
 	        {
 	            y = frameHeight - radius -1;
 	            dy =-dy;
-	            if (dy < 0)
+	           /* if (dy < 0)
 	            	dy += DEC;
 	            else if (dy > 0)
-	            	dy -= DEC;
+	            	dy -= DEC; 8*/
 	        }
 	        
 	        else if(y+dy < 0)
 	        {        
 	            y = radius;
 	            dy = -dy;
-	            if (dy < 0)
+	           /* if (dy < 0)
 	            	dy += DEC;
 	            else if (dy > 0)
-	            	dy -= DEC;
+	            	dy -= DEC; */
 	            //f(x < frame.getWidth()/2 )
 	        }     
 	        
@@ -142,16 +140,43 @@ public class Ball implements Collidable
 	    
 	    public void collides(GUI g)
 	    {
-	    	if(x + radius > g.getX() || x - radius < g.getX() + g.getWidth())
-	    		dx=-dx;
-	    	else
-	    		dy=-dy;
-	    	
+	    		/*if(x < g.getX() && y <  &&(x + radius >= g.getX() && y + radius >= g.getY() + ))    //if the ball hits the right side of the board
+	    		{
+	    			dx=-dx;
+	    			x = (int)g.getX();
+	    		}
+	    		if(y + radius >= g.getY() || )
+	    		{        
+	    			dy = -dy;
+	    			y = (int)g.getY();
+	    		}
+	        */
+	    	if(x < g.getX())
+			{
+					if((x + radius >= g.getX()) && (y + radius >= g.getY() || y-radius <= g.getY() + g.getHeight())) 
+					{
+						x = (int)g.getX();
+						dx=-dx;
+					}
+			}
+			else if((x - radius <= g.getX() + g.getWidth()) && (y + radius >= g.getY() || y-radius <= g.getY() + g.getHeight()))
+			{
+				x = (int)g.getX() + (int)g.getWidth();
+				dx = -dx;
+			}
+					
+			if(y < g.getY())
+				if((x - radius <= g.getX()) && (y + radius >= g.getY()))
+				{
+						
+				}
+				else if((x - radius <= g.getX() + g.getWidth()) && (x - radius >= g.getY() + g.getHeight()))		
+				{
+					
+				}
+			}
+	        
 	    }
-	    /*public static void sound()
-	    {
-	    	
-	    }*/
 	}
 
 
