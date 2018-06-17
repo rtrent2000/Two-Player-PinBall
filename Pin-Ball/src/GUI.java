@@ -3,12 +3,12 @@ import java.awt.Rectangle;
 public class GUI extends Rectangle implements Collidable
 {
 
-	private int radius, x1, x2, y1, y2, width, height;
-	boolean isCircle =false;
-	boolean isTriangle = false;
+	private int angle, radius, x1, x2, y1, y2, width, height;
+	private boolean isCircle =false;
+	private boolean isTriangle = false;
 	
 	
-	public GUI(int topLeftX, int topLeftY, int w, int h)
+	public GUI(int topLeftX, int topLeftY, int w, int h, int angle1)
 	{
 		
 		super(topLeftX,topLeftY,w,h);
@@ -21,40 +21,72 @@ public class GUI extends Rectangle implements Collidable
 		radius = radius1;
 	}
 	
-	public GUI(int x11, int x21, int y11, int y21, boolean dog)
+	public GUI(int x11, int x21, int y11, int y21, int width1, int height1)
 	{
 		x1 = x11;
 		x2 = x21;
 		y1 = y11;
 		y2 = y21;
+		width = width1;
+		height = height1;
 		isTriangle = true;
 	}
 	
-	
-	
-	public boolean collides(Ball b)
+	public boolean collides(Ball b) //rectangle
 	{
 		if(b.getX() < x)
 		{
-			if((b.getX() + b.getRadius() > x  ) && (b.getY() +b.getRadius() > y && b.getY() +height))
+			if(b.getY() < y)
+				if((b.getX() + b.getRadius() > x) && (b.getY() + b.getRadius() > y))
+				{
+					return true;
+				}
+			else if((b.getX() + b.getRadius() > x) && (b.getY() - b.getRadius() > y + height))		
 			{
 				return true;
 			}
 		}
-		else if((b.getX() - b.getRadius() < x) && (b.getY() < y && b.getY() +height))
+		else
 		{
-			
-			return true;
-			
+			if(b.getY() < y)
+				if((b.getX() - b.getRadius() < x +width) && (b.getY() + b.getRadius() > y))
+				{
+					return true;
+				}
+			else if((b.getX() - b.getRadius() < x + width) && (b.getY() - b.getRadius() > y + height))		
+			{
+				return true;
+			}
 		}
-		else if(isCircle == true &&(b.getX() + b.getRadius() + radius > x        //checks if ball is close enough to the bumper to consider touching 
+		return false;
+	}
+	
+		
+	public boolean collidesCircle(Ball b)
+	{
+		if(b.getX() + b.getRadius() + radius > x        //checks if ball is close enough to the bumper to consider touching 
 				&& b.getX() < x + b.getX() + radius
 				&& b.getY() + b.getRadius() + radius > y 
-				&& b.getY() < y + b.getRadius() + radius))
+				&& b.getY() < y + b.getRadius() + radius)
 		{
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean collidesTri(Ball b)
+	{
+		//if()
+		//{
+		//	return true;
+		//}
+		return false;
+	}
+	
+	
+	public int getAngle()
+	{
+		return angle;
 	}
 	
 	
@@ -69,11 +101,15 @@ public class GUI extends Rectangle implements Collidable
 		return width;
 	}
 	
+	public void setAngle(int angle1)
+	{
+		angle = angle1;
+	}
+	
 	public int getX1()
 	{
 		return x1;
 	}
-	
 	
 	public int getX2()
 	{
@@ -91,8 +127,14 @@ public class GUI extends Rectangle implements Collidable
 		return y2;
 	}
 	
-	public int getRadius()
+	public boolean getIsCircle()
 	{
-		return radius;
+		return isCircle;
 	}
+	
+	public boolean getIsTriangle()
+	{
+		return isTriangle;
+	}
+
 }
