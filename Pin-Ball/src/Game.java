@@ -4,7 +4,6 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.math.*;
@@ -13,7 +12,7 @@ public class Game extends Applet implements Runnable
 {
 	private static final long serialVersionUID = 1L;
 	private int rnd = (int) (Math.random() * 2 + 1);
-	private int pot = 0;
+	private int pot = 0, player1 = 0, player2 = 0;
 	private static int x = -50, y = -50, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
 	LTPa = -10, LBPa = -10, RTPa = -10, RBPa = -10,
@@ -25,13 +24,15 @@ public class Game extends Applet implements Runnable
 	private Dimension d = new Dimension(WIDTH,HEIGHT), goalDimension = new Dimension(0,0);
 	private Ball ball;
 	private Thread thread = new Thread(this);
-	//private GUI lGoal = new GUI(), GUI rGoal = new GUI();
+	private Goals lGoal = new Goals(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight()),
+	rGoal = new Goals(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
 	private GUI LTT = new GUI(60,341,294,0,true), LBT = new GUI(60,341,494,768,true), RTT = new GUI(1043,1306,0,294,true), RBT = new GUI(1043,1306,768,494,true),
 	LTC = new GUI(381,182,40), LBC = new GUI(381, 596, 40), RTC = new GUI(1003,182,40), RBC = new GUI(1003,596,40),
 	TR = new GUI(532,244,302,60), BR = new GUI(532,464,302,60);
 	private Paddle LT = new Paddle(40, 294, 20, 73), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 135, 20, 73),
 	RT = new Paddle(1366 -  60, 294, 20, 73), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +135, 20, 73);
-	private ArrayList<GUI> collidables = new ArrayList<GUI>(Arrays.asList(LTT,LBT,RTT,RBT,LTC,LBC,RTC,RBC,TR,BR,LB,LT,RB,RT));
+	private ArrayList<GUI> collidables = new ArrayList<GUI>(Arrays.asList(LTT,LBT,RTT,RBT,LTC,LBC,RTC,RBC,TR,BR,LB,LT,RB,RT,lGoal,rGoal));
+	private boolean hasCollided;
 
 	public void start()
 	{
@@ -100,7 +101,6 @@ public class Game extends Applet implements Runnable
 	public void run()
 	{
 		Timer gameTimer = new Timer();
-		Timer userInput = new Timer();
 		
 		gameTimer.schedule(new TimerTask()
 		{
@@ -124,24 +124,116 @@ public class Game extends Applet implements Runnable
 			}
 		}, (long)1000, (long)1000);
 		
-		while(true) {		
+		while(true) {	
 			x = ball.moveX();
-			y = ball.moveY();
-			for(int i =0; i < collidables.size(); i++)//if this doesn't work delete this part until the next comment
+			y = ball.moveY();	
+			hasCollided = false;
+			for(int i =0; i < collidables.size() ; i++)
 			{
-				if(collidables.get(i).getIsTriangle())
+				if (!collidables.get(i).getIsTriangle() && !collidables.get(i).getIsGoal())
 				{
-						ball.collidesTri(collidables.get(i));
+					if(ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))
+					{
+						if(x < collidables.get(i).getX()  )
+						{
+							ball.setDX(-ball.getDX());
+							x = (int) collidables.get(i).getX() + ball.getDX() + 10;
+							ball.setX(x);
+							//ball.setDX(-ball.getDX());
+							hasCollided = true;
+						}
+						else if(x > collidables.get(i).getX() + collidables.get(i).getWidth())
+						{
+							ball.setDX(-ball.getDX());
+							x = (int) (collidables.get(i).getX() + collidables.get(i).getWidth() + ball.getDX() +10);
+							ball.setX(x);
+							//ball.setDX(-ball.getDX());
+							hasCollided = true;
+						}
+						else if(y < collidables.get(i).getY()) 		//also make a setx/y in ball if you change coords in this if
+						{
+							ball.setDY(-ball.getDY());
+							y = (int) collidables.get(i).getY() + ball.getDY() + 10;
+							ball.setY(y);
+							//ball.setDY(-ball.getDY());
+							hasCollided = true;
+						}
+						else
+						{
+							ball.setDY(-ball.getDY());
+							y = (int) (collidables.get(i).getY() + collidables.get(i).getHeight() + ball.getDY() + 10);
+							ball.setY(y);
+							//ball.setDY(-ball.getDY());
+							hasCollided = true;
+						}
+						
+						pot += 10;
+					}	
 				}
-				else if(collidables.get(i).getIsCircle())
+				else if(collidables.get(i).getIsTriangle())
 				{
-						ball.collidesCircle(collidables.get(i));
+					if(ball.getRect().getBounds().intersectsLine(collidables.get(i).getX1(),collidables.get(i).getY1(),collidables.get(i).getX2(),collidables.get(i).getY2()))
+					{
+						if((x < WIDTH / 2))
+						{
+							if(y < HEIGHT/2)
+							{
+								ball.setDX(-ball.getDY());
+								ball.setDY(-ball.getDX());
+								x += 20;
+								y += 20;
+								ball.setX(x);
+								ball.setY(y);
+							}
+							else
+							{
+								ball.setDX(-ball.getDY());
+								ball.setDY(-ball.getDX());
+								x += 20;
+								y -= 20;
+								ball.setX(x);
+								ball.setY(y);
+								
+							}
+
+						}
+						else
+						{
+							if(y < HEIGHT/2)
+							{
+								ball.setDX(-ball.getDY());
+								ball.setDY(-ball.getDX());
+								x -= 20;
+								y += 20;
+								ball.setX(x);
+								ball.setY(y);
+							}
+							else if(y > HEIGHT/2)
+							{
+								ball.setDX(-ball.getDY());
+								ball.setDY(-ball.getDX());
+								x -=20;
+								y -=20;
+								ball.setX(x);
+								ball.setY(y);
+							}
+						}
+					}
+					
 				}
-				else
+				else if(collidables.get(i).getIsGoal())
 				{
-						ball.collides(collidables.get(i));
+					if(x < WIDTH / 2)
+					{
+						player2 += pot;
+					}
+					else
+					{
+						player1 += pot;
+					}
+					pot = 0;
 				}
-			}									//
+			}
 			if (LTPma != -10)
 			{
 				LTPa += LTinc;
@@ -211,9 +303,12 @@ public class Game extends Applet implements Runnable
 	public void paint(Graphics g)
 	{
 		//goals
+		
 	    g.setColor(Color.RED);
-	    g.drawRect(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
-	    g.drawRect(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    g.fillRect(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    g.setColor(Color.CYAN);
+	    g.fillRect(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+	    
 	    
 	    //goal barriers and other
 	    g.setColor(Color.BLUE);
@@ -279,6 +374,8 @@ public class Game extends Applet implements Runnable
 	    else
 	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
 	    g.drawString("Pot: " + pot,  1240 , 20 );
+	    
+
 	}
 	    
 	public void update(Graphics g)

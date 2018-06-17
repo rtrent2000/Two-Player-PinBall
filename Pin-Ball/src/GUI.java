@@ -6,23 +6,26 @@ public class GUI extends Rectangle implements Collidable
 	private int angle, radius, x1, x2, y1, y2, width, height;
 	private boolean isCircle =false;
 	private boolean isTriangle = false;
-	
+	private boolean isGoal = false;
+	private Rectangle hitbox;
 	
 	public GUI(int topLeftX, int topLeftY, int w, int h)
 	{
-		
 		super(topLeftX,topLeftY,w,h);
+		hitbox = new Rectangle(topLeftX,topLeftY,w,h);
 	}
 	
 	public GUI(int centerX, int centerY, int radius1)
 	{
 		super(centerX - radius1,centerY - radius1,2*radius1, 2*radius1);
+		hitbox = new Rectangle(centerX - radius1,centerY - radius1,2*radius1, 2*radius1);
 		isCircle = true;
 		radius = radius1;
 	}
 	
-	public GUI(int x11, int x21, int y11, int y21, boolean doggo)
+	public GUI(int x11, int x21, int y11, int y21,boolean doggo)
 	{
+		//hitbox = new Rectangle()			//figure out how to rotate later
 		x1 = x11;
 		x2 = x21;
 		y1 = y11;
@@ -30,8 +33,8 @@ public class GUI extends Rectangle implements Collidable
 		isTriangle = true;
 	}
 	
-	public void collides(Ball b) //rectangle
-	{
+	//public void collides(Ball b) //rectangle
+	//{
 		/*if(b.getX() < x)
 		{
 			if(b.getY() < y)
@@ -60,7 +63,7 @@ public class GUI extends Rectangle implements Collidable
 	
 		
 		
-	}
+	//}
 	
 		
 	public boolean collidesCircle(Ball b)
@@ -142,5 +145,19 @@ public class GUI extends Rectangle implements Collidable
 	{
 		return isTriangle;
 	}
+	
+	public boolean getIsGoal()
+	{
+		return isGoal;
+	}
+	
+	public void setIsGoal(boolean doggo)
+	{
+		isGoal = doggo;
+	}
 
+	public Rectangle getRect()
+	{
+		return hitbox;
+	}
 }
