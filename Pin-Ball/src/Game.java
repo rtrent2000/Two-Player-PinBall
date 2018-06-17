@@ -12,6 +12,7 @@ public class Game extends Applet implements Runnable
 {
 	private static final long serialVersionUID = 1L;
 	private int rnd = (int) (Math.random() * 2 + 1);
+	private int pot = 0;
 	private static int x = -50, y = -50, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
 	LTPa = -10, LBPa = -10, RTPa = -10, RBPa = -10,
@@ -217,10 +218,12 @@ public class Game extends Applet implements Runnable
 	    g.fillPolygon(new int[]{LBT.getX1(),LBT.getX2(),60},new int[]{LBT.getY1(),LBT.getY2(),768} , 3);
 	    g.fillPolygon(new int[]{RTT.getX1(),RTT.getX2(),1306},new int[]{RTT.getY1(),RTT.getY2(),0} , 3);
 	    g.fillPolygon(new int[]{RBT.getX1(),RBT.getX2(),1306},new int[]{RBT.getY1(),RBT.getY2(),768} , 3);
+	    g.setColor(Color.MAGENTA);
 	    g.fillOval((int)LTC.getX(), (int)LTC.getY(), LTC.getRadius()*2 , LTC.getRadius()*2);
 	    g.fillOval((int)LBC.getX(), (int)LBC.getY(), LBC.getRadius()*2 , LBC.getRadius()*2);
 	    g.fillOval((int)RTC.getX(), (int)RTC.getY(), RTC.getRadius()*2 , RTC.getRadius()*2);
 	    g.fillOval((int)RBC.getX(), (int)RBC.getY(), RBC.getRadius()*2 , RBC.getRadius()*2);
+	    g.setColor(Color.GREEN);
 	    g.fillRect((int)TR.getX(),(int)TR.getY(),(int)TR.getWidth(),(int)TR.getHeight());
 	    g.fillRect((int)BR.getX(),(int)BR.getY(),(int)BR.getWidth(),(int)BR.getHeight());
 	    
@@ -259,6 +262,7 @@ public class Game extends Applet implements Runnable
 	    //timer
 	    g.setColor(Color.YELLOW);
 	    g.fillRect( WIDTH/2 - 22, 0, 40, 25);
+	    g.fillRect( 1240, 0, 100, 25);
 	    g.setColor(Color.BLACK);
 	    g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
 	    if (secondsPassed % 60 == 0)
@@ -267,6 +271,7 @@ public class Game extends Applet implements Runnable
 	    	g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
 	    else
 	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
+	    g.drawString("Pot: " + pot,  1240 , 20 );
 	}
 	    
 	public void update(Graphics g)
