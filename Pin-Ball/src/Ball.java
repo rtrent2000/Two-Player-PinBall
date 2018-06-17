@@ -1,11 +1,9 @@
 import java.awt.Rectangle;
 import java.util.*;
-import sun.audio.*;
-import java.io.*;
 
-public class Ball
+public class Ball implements Collidable
 {
-		private final int XGRAV = -1;
+		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
 	    //private ArrayList<Rectangle> obstacles;
 	    private Rectangle circleRectangle;
@@ -13,7 +11,7 @@ public class Ball
 	    
 	    
 	    
-	    public Ball(int radius, int x1, int y1)//ArrayList<Rectangle> poops)
+	    public Ball(int radius1, int x1, int y1)//ArrayList<Rectangle> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
@@ -35,6 +33,7 @@ public class Ball
 				}
 	    		
 	    	}, (long)150, (long)150);
+	       radius = radius1;
 	       x = x1;
 	       y = y1; 
 	       dx = 0;
@@ -42,7 +41,17 @@ public class Ball
 	      // obstacles = poops;
 	       circleRectangle = new Rectangle( x - radius, y-radius, radius *2, radius *2);
 	    }
-	        
+	    
+	    public int getX()
+	    {
+	        return x;
+	    }
+	    
+	    public int getY()
+	    {           
+	        return y;
+	    }
+	    
 	    public int getDX()
 	    {
 	        return dx;
@@ -53,26 +62,37 @@ public class Ball
 	        return dy;
 	    }
 	    
+	    public int getRadius()
+	    {           
+	        return radius;
+	    }
+	    
 	    
 	    
 	    public int moveX()
 	    {
-	    	
-	        
 	        if(x + dx > frameWidth - radius)    //if the ball hits the right side of the board
 	        {
 	            x = frameWidth - radius -1;
 	            dx =-dx;
-	            //sound();
+	            if (dx < 0)
+	            	dx += DEC;
+	            else if (dx > 0)
+	            	dx -= DEC;
 	        }
 	        else if(x+dx < 0)
 	        {        
 	            dx = -dx;
 	            x = radius;
-	            //sound();
+	            if (dx < 0)
+	            	dx += DEC;
+	            else if (dx > 0)
+	            	dx -= DEC;
 	        }    
 	        x += dx;
 	        return x;
+	        
+	        
 	    }
 	    
 	    
@@ -85,14 +105,20 @@ public class Ball
 	        {
 	            y = frameHeight - radius -1;
 	            dy =-dy;
-	            //sound();
+	            if (dy < 0)
+	            	dy += DEC;
+	            else if (dy > 0)
+	            	dy -= DEC;
 	        }
 	        
 	        else if(y+dy < 0)
 	        {        
 	            y = radius;
 	            dy = -dy;
-	            //sound();
+	            if (dy < 0)
+	            	dy += DEC;
+	            else if (dy > 0)
+	            	dy -= DEC;
 	            //f(x < frame.getWidth()/2 )
 	        }     
 	        
@@ -101,20 +127,12 @@ public class Ball
 	    }
 	    
 	    
-	   // public rectangle collides()
-	    //{
+	    public void collides(GUI g)
+	    {
 	        
-	      //  for(int i = 0; i < obstacles.size() -1; i++)
-	      //  {
-	      //      if(.intersects(obstacles.get(i));)
-	      //      {
-	      //          obstacles.get(i);
-	            
-	            
-	      //      }
-	     //   }
+	      
 	    
-	    //}
+	    }
 	    
 	    /*public static void sound()
 	    {

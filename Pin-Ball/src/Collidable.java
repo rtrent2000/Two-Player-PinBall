@@ -1,4 +1,7 @@
 
-public interface Collidable {
-//BURP
+public interface Collidable 
+{
+	
+	public boolean  collides(Ball b);
+	
 }
