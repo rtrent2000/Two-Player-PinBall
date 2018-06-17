@@ -11,7 +11,7 @@ public class Ball implements Collidable
 	    
 	    
 	    
-	    public Ball(int radius1, int x1, int y1)//ArrayList<Rectangle> poops)
+	    public Ball(int radius1, int x1, int y1, ArrayList<Rectangle> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
