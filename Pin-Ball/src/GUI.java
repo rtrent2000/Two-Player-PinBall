@@ -3,12 +3,12 @@ import java.awt.Rectangle;
 public class GUI extends Rectangle implements Collidable
 {
 
-	private int angle, radius, x1, x2, y1, y2, width, height;
+	private int radius, x1, x2, y1, y2, width, height;
 	boolean isCircle =false;
 	boolean isTriangle = false;
 	
 	
-	public GUI(int topLeftX, int topLeftY, int w, int h, int angle1)
+	public GUI(int topLeftX, int topLeftY, int w, int h)
 	{
 		
 		super(topLeftX,topLeftY,w,h);
@@ -21,14 +21,12 @@ public class GUI extends Rectangle implements Collidable
 		radius = radius1;
 	}
 	
-	public GUI(int x11, int x21, int y11, int y21, int width1, int height1)
+	public GUI(int x11, int x21, int y11, int y21, boolean dog)
 	{
 		x1 = x11;
 		x2 = x21;
 		y1 = y11;
 		y2 = y21;
-		width = width1;
-		height = height1;
 		isTriangle = true;
 	}
 	
@@ -59,11 +57,6 @@ public class GUI extends Rectangle implements Collidable
 		return false;
 	}
 	
-	public int getAngle()
-	{
-		return angle;
-	}
-	
 	
 	public int getHeightTri()
 	{
@@ -75,14 +68,6 @@ public class GUI extends Rectangle implements Collidable
 	{
 		return width;
 	}
-	
-	public void setAngle(int angle1)
-	{
-		
-		
-		angle = angle1;
-	}
-	
 	
 	public int getX1()
 	{
@@ -104,5 +89,10 @@ public class GUI extends Rectangle implements Collidable
 	public int getY2()
 	{
 		return y2;
+	}
+	
+	public int getRadius()
+	{
+		return radius;
 	}
 }

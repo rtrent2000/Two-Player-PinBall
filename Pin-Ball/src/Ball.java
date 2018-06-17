@@ -1,17 +1,16 @@
 import java.awt.Rectangle;
 import java.util.*;
 
-public class Ball implements Collidable
+public class Ball
 {
 		private final int XGRAV = -1, DEC = 2;
 		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
-	    //private ArrayList<Rectangle> obstacles;
+	    private ArrayList<Collidable> obstacles;
 	    private Rectangle circleRectangle;
 	    private static Timer gravTimer;
 	    
 	    
-	    
-	    public Ball(int radius1, int x1, int y1, ArrayList<Rectangle> poops)
+	    public Ball(int radius1, int x1, int y1, ArrayList<Collidable> poops)
 	    {
 	    	gravTimer = new Timer();
 	    	gravTimer.scheduleAtFixedRate(new TimerTask()
