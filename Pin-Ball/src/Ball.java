@@ -1,16 +1,11 @@
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.util.*;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
 
 public class Ball
 {
-		private final int XGRAV = -1, DEC = 2;
-		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV, color,
-		blue, red, green;
-	    private ArrayList<GUI> obstacles;
+		private final int XGRAV = -1, DEC = 0;
+		private int x, y, dx, dy, frameWidth = 1366, frameHeight = 768, radius, xGrav = XGRAV;
 	    private static Timer gravTimer;
 	    private Rectangle circleRect;
 	    
@@ -40,8 +35,8 @@ public class Ball
 	       radius = radius1;
 	       x = x1;
 	       y = y1; 
-	       dx = 100;
-	       dy = 100;
+	       dx = 16;
+	       dy = 16;
 	       obstacles = poops;
 	       circleRect = new Rectangle(x -radius, y - radius, 2*radius, 2 *radius);
 	    }
@@ -68,53 +63,67 @@ public class Ball
 	    	
 	    }
 	    
+	    public boolean canAccelerate()
+		{
+	    	return Math.sqrt((double)(dx *dx) + (dy *dy)) < 19   &&   Math.sqrt((double)(dx *dx) + (dy *dy)) > 10;
+		}
+
+	    
+	    
 	    public int moveX()
 	    {
-	        if(x + dx > frameWidth - radius)    //if the ball hits the right side of the board
-	        {
-	            x = frameWidth - radius -1;
-	            dx =-dx;
-	            if (dx < 0)
-	            	dx += DEC;
-	            else if (dx > 0)
-	            	dx -= DEC;
-	        }
-	        else if(x+dx < 0)
-	        {        
-	            dx = -dx;
-	            x = radius;
-	            if (dx < 0)
-	            	dx += DEC;
-	            else if (dx > 0)
-	            	dx -= DEC; 
-	        }
-	        x += dx;
-	        circleRect = new Rectangle(x -radius, y - radius, 2*radius, 2 *radius);
-	        return x;
+
+	    	if(x + dx > frameWidth - radius)    //if the ball hits the right side of the board
+	   		{
+	   			x = frameWidth - radius -1;
+	   			dx =-dx;
+	   			if(canAccelerate())
+    			{		    			
+	   				if (dx < 0)
+		    			dx += DEC;
+		   			else if (dx > 0)
+		   				dx -= DEC;
+	    		}
+	   		}
+	   		else if(x+dx < 0)
+	   		{        
+	   			dx = -dx;
+    			x = radius;	 
+    			if(canAccelerate())
+    			{
+    				if (dx < 0)
+    					dx+= DEC;
+    				else if (dx > 0)
+    					dx -= DEC; 
+    			}
+	   		}
+	    	x += dx;
+	    	circleRect = new Rectangle(x -radius, y - radius, 2*radius, 2 *radius);
+	    	return x;
 	    }
 	        
 	    public int moveY()
 	    {
-	       if(y+ dy > frameHeight- radius -1)   
-	        {
-	            y = frameHeight - radius -1;
-	            dy =-dy;
-	           /* if (dy < 0)
-	            	dy += DEC;
-	            else if (dy > 0)
-	            	dy -= DEC; 8*/
-	        }
-	        
-	        else if(y+dy < 0)
-	        {        
-	            y = radius;
-	            dy = -dy;
-	           /* if (dy < 0)
-	            	dy += DEC;
-	            else if (dy > 0)
-	            	dy -= DEC; */
-	            //f(x < frame.getWidth()/2 )
-	        }     
+	    	
+		    if(y+ dy > frameHeight- radius -1)   
+		    {
+		    	y = frameHeight - radius -1;
+		        dy =-dy;
+		           /* if (dy < 0)
+		            	dy += DEC;
+		            else if (dy > 0)
+		            	dy -= DEC; 8*/
+		    }
+		    else if(y+dy < 0)
+		    {        
+		        y = radius;
+		        dy = -dy;
+		           /* if (dy < 0)
+		            	dy += DEC;
+		            else if (dy > 0)
+		            	dy -= DEC; */
+		            //f(x < frame.getWidth()/2 )
+		    }
 	        y += dy;
 	        circleRect = new Rectangle(x -radius, y - radius, 2*radius, 2 *radius);
 	        return y;
@@ -139,7 +148,7 @@ public class Ball
 	    {
 	    	dy = y1;
 	    }
-	    
+	  /*  
 	    public void collidesTri(GUI g)
 	    {
 	    	
@@ -157,7 +166,7 @@ public class Ball
 	    public void collides(GUI g)
 	    {
 	    
-	    	/*if(x < g.getX())
+	    	if(x < g.getX())
 			{
 					if((x + radius >= g.getX()) && (y + radius >= g.getY() || y-radius <= g.getY() + g.getHeight())) 
 					{
@@ -181,8 +190,8 @@ public class Ball
 			{
 				dy =-dy;
 				y = (int)g.getY() +(int)g.getHeight();
-			}*/
-	}
+			}
+		}	*/
 }
 
 

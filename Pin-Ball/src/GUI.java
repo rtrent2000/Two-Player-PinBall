@@ -7,6 +7,7 @@ public class GUI extends Rectangle implements Collidable
 	private boolean isCircle =false;
 	private boolean isTriangle = false;
 	private boolean isGoal = false;
+	private boolean isPaddle = false;
 	private Rectangle hitbox;
 	
 	public GUI(int topLeftX, int topLeftY, int w, int h)
@@ -155,9 +156,25 @@ public class GUI extends Rectangle implements Collidable
 	{
 		isGoal = doggo;
 	}
+	
+	public boolean getIsPaddle()
+	{
+		return isPaddle;
+	}
+	
+	public void setIsPaddle(boolean doggo)
+	{
+		isPaddle = doggo;
+	}
 
 	public Rectangle getRect()
 	{
 		return hitbox;
+	}
+
+	@Override
+	public boolean collides(Ball b) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

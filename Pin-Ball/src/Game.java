@@ -26,13 +26,12 @@ public class Game extends Applet implements Runnable
 	private Thread thread = new Thread(this);
 	private Goals lGoal = new Goals(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight()),
 	rGoal = new Goals(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
-	private GUI LTT = new GUI(60,341,294,0,true), LBT = new GUI(60,341,494,768,true), RTT = new GUI(1043,1306,0,294,true), RBT = new GUI(1043,1306,768,494,true),
-	LTC = new GUI(381,182,40), LBC = new GUI(381, 596, 40), RTC = new GUI(1003,182,40), RBC = new GUI(1003,596,40),
-	TR = new GUI(532,244,302,60), BR = new GUI(532,464,302,60);
-	private Paddle LT = new Paddle(40, 294, 20, 73), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 135, 20, 73),
-	RT = new Paddle(1366 -  60, 294, 20, 73), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +135, 20, 73);
-	private ArrayList<GUI> collidables = new ArrayList<GUI>(Arrays.asList(LTT,LBT,RTT,RBT,LTC,LBC,RTC,RBC,TR,BR,LB,LT,RB,RT,lGoal,rGoal));
-	private boolean hasCollided;
+	private GUI LTC = new GUI(381,182,40), LBC = new GUI(381, 596, 40), RTC = new GUI(1003,182,40), RBC = new GUI(1003,596,40),
+	TR = new GUI(532,244,302,60), BR = new GUI(532,464,302,60), LTB = new GUI(0, 0, 60,295),LBB = new GUI(0, 294 + (int)goalDimension.getHeight(), 61, 294),
+	RTB = new GUI(1306, 0, 60, 295),RBB = new GUI(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
+	private Paddle LT = new Paddle(40, 294, 20, 65), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 143, 20, 65),
+	RT = new Paddle(1366 -  60, 294, 20, 65), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +143, 20, 65);
+	private ArrayList<GUI> collidables = new ArrayList<GUI>(Arrays.asList(LTB, LBB, RBB, RTB, LTC,LBC,RTC,RBC,TR,BR,LB,LT,RB,RT,lGoal,rGoal));
 
 	public void start()
 	{
@@ -127,20 +126,18 @@ public class Game extends Applet implements Runnable
 		while(true) {	
 			x = ball.moveX();
 			y = ball.moveY();	
-			hasCollided = false;
 			for(int i =0; i < collidables.size() ; i++)
 			{
 				if (!collidables.get(i).getIsTriangle() && !collidables.get(i).getIsGoal())
 				{
 					if(ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))
 					{
-						if(x < collidables.get(i).getX()  )
+						if(x <= collidables.get(i).getX()  )
 						{
 							ball.setDX(-ball.getDX());
 							x = (int) collidables.get(i).getX() + ball.getDX() + 10;
 							ball.setX(x);
 							//ball.setDX(-ball.getDX());
-							hasCollided = true;
 						}
 						else if(x > collidables.get(i).getX() + collidables.get(i).getWidth())
 						{
@@ -148,29 +145,26 @@ public class Game extends Applet implements Runnable
 							x = (int) (collidables.get(i).getX() + collidables.get(i).getWidth() + ball.getDX() +10);
 							ball.setX(x);
 							//ball.setDX(-ball.getDX());
-							hasCollided = true;
 						}
-						else if(y < collidables.get(i).getY()) 		//also make a setx/y in ball if you change coords in this if
+						else if(y <= collidables.get(i).getY()) 		//also make a setx/y in ball if you change coords in this if
 						{
 							ball.setDY(-ball.getDY());
 							y = (int) collidables.get(i).getY() + ball.getDY() + 10;
 							ball.setY(y);
 							//ball.setDY(-ball.getDY());
-							hasCollided = true;
 						}
-						else
+						else 
 						{
 							ball.setDY(-ball.getDY());
 							y = (int) (collidables.get(i).getY() + collidables.get(i).getHeight() + ball.getDY() + 10);
 							ball.setY(y);
 							//ball.setDY(-ball.getDY());
-							hasCollided = true;
 						}
 						
 						pot += 10;
 					}	
 				}
-				else if(collidables.get(i).getIsTriangle())
+				/*else if(collidables.get(i).getIsTriangle())
 				{
 					if(ball.getRect().getBounds().intersectsLine(collidables.get(i).getX1(),collidables.get(i).getY1(),collidables.get(i).getX2(),collidables.get(i).getY2()))
 					{
@@ -220,18 +214,23 @@ public class Game extends Applet implements Runnable
 						}
 					}
 					
-				}
+				}*/
 				else if(collidables.get(i).getIsGoal())
 				{
-					if(x < WIDTH / 2)
+					if (ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))
 					{
-						player2 += pot;
+						if(x < WIDTH / 2)
+						{
+							player2 += pot;
+							pot = 0;
+						}
+						else
+						{
+							player1 += pot;
+							//pot = 0;
+						}
+					
 					}
-					else
-					{
-						player1 += pot;
-					}
-					pot = 0;
 				}
 			}
 			if (LTPma != -10)
@@ -316,10 +315,6 @@ public class Game extends Applet implements Runnable
 	    g.fillRect(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
 	    g.fillRect(0, 0, 60,295);
 	    g.fillRect(0, 294 + (int)goalDimension.getHeight(), 61, 294);
-	    g.fillPolygon(new int[]{LTT.getX1(),LTT.getX2(),60},new int[]{LTT.getY1(),LTT.getY2(),0} , 3);
-	    g.fillPolygon(new int[]{LBT.getX1(),LBT.getX2(),60},new int[]{LBT.getY1(),LBT.getY2(),768} , 3);
-	    g.fillPolygon(new int[]{RTT.getX1(),RTT.getX2(),1306},new int[]{RTT.getY1(),RTT.getY2(),0} , 3);
-	    g.fillPolygon(new int[]{RBT.getX1(),RBT.getX2(),1306},new int[]{RBT.getY1(),RBT.getY2(),768} , 3);
 	    g.setColor(Color.MAGENTA);
 	    g.fillOval((int)LTC.getX(), (int)LTC.getY(), LTC.getRadius()*2 , LTC.getRadius()*2);
 	    g.fillOval((int)LBC.getX(), (int)LBC.getY(), LBC.getRadius()*2 , LBC.getRadius()*2);
