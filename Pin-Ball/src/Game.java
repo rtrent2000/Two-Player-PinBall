@@ -1,3 +1,4 @@
+//import statements
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.*;
@@ -6,12 +7,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.math.*;
 
 public class Game extends Applet implements Runnable
 {
 	private static final long serialVersionUID = 1L;
 	private int rnd = (int) (Math.random() * 2 + 1);
+	//Player scores are set to 0
 	private int pot = 0, player1 = 0, player2 = 0;
 	private static int x = -50, y = -50, radius = 20, 
 	secondsPassed = 180, seconds, minutes = 3,
@@ -29,9 +30,10 @@ public class Game extends Applet implements Runnable
 	private GUI LTC = new GUI(381,182,40), LBC = new GUI(381, 596, 40), RTC = new GUI(1003,182,40), RBC = new GUI(1003,596,40),
 	TR = new GUI(532,244,302,60), BR = new GUI(532,464,302,60), LTB = new GUI(0, 0, 60,295),LBB = new GUI(0, 294 + (int)goalDimension.getHeight(), 61, 294),
 	RTB = new GUI(1306, 0, 60, 295),RBB = new GUI(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
-	private Paddle LT = new Paddle(40, 294, 20, 65), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 143, 20, 65),
-	RT = new Paddle(1366 -  60, 294, 20, 65), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +143, 20, 65);
+	private Paddle LT = new Paddle(40, 294, 20, 65, true, true), LB = new Paddle(40, 286 + (int)goalDimension.getHeight()+ 143, 20, 65, false, true),
+	RT = new Paddle(1366 -  60, 294, 20, 65, true, false), RB = new Paddle(1366 - 60, 286 + (int)goalDimension.getHeight() +143, 20, 65, false, false);
 	private ArrayList<GUI> collidables = new ArrayList<GUI>(Arrays.asList(LTB, LBB, RBB, RTB, LTC,LBC,RTC,RBC,TR,BR,LB,LT,RB,RT,lGoal,rGoal));
+	private boolean gameIsOver = false, display = false;
 
 	public void start()
 	{
@@ -58,6 +60,7 @@ public class Game extends Applet implements Runnable
 				y = 40;
 				goalDimension = new Dimension(40, 200);
 				ball = new Ball(radius,x,y,collidables);
+				display = true;
 				thread.start();
 			}});
 		addKeyListener(new KeyListener() 
@@ -126,95 +129,40 @@ public class Game extends Applet implements Runnable
 		while(true) {	
 			x = ball.moveX();
 			y = ball.moveY();	
-			for(int i =0; i < collidables.size() ; i++)
+			for(int i =0; i < collidables.size() ; i++)		//goes through all collidables
 			{
-				if (!collidables.get(i).getIsTriangle() && !collidables.get(i).getIsGoal())
+				if (!collidables.get(i).getIsGoal() && !collidables.get(i).getIsPaddle())		//if it is any obstacle other than goal
 				{
-					if(ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))
+					if(ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))	//if the ball intersects with object
 					{
-						if(x <= collidables.get(i).getX()  )
+						if(x <= collidables.get(i).getX()  )			//if the ball is coming from the left
 						{
 							ball.setDX(-ball.getDX());
-							x = (int) collidables.get(i).getX() + ball.getDX() + 10;
+							x = (int) collidables.get(i).getX() + ball.getDX();
 							ball.setX(x);
-							//ball.setDX(-ball.getDX());
 						}
-						else if(x > collidables.get(i).getX() + collidables.get(i).getWidth())
+						else if(x > collidables.get(i).getX() + collidables.get(i).getWidth())	//if the ball is coming from the right
 						{
 							ball.setDX(-ball.getDX());
-							x = (int) (collidables.get(i).getX() + collidables.get(i).getWidth() + ball.getDX() +10);
+							x = (int) (collidables.get(i).getX() + collidables.get(i).getWidth() + ball.getDX());
 							ball.setX(x);
-							//ball.setDX(-ball.getDX());
 						}
-						else if(y <= collidables.get(i).getY()) 		//also make a setx/y in ball if you change coords in this if
+						else if(y <= collidables.get(i).getY()) 	//if the ball is coming from above
 						{
 							ball.setDY(-ball.getDY());
-							y = (int) collidables.get(i).getY() + ball.getDY() + 10;
+							y = (int) collidables.get(i).getY() + ball.getDY();
 							ball.setY(y);
-							//ball.setDY(-ball.getDY());
 						}
-						else 
+						else //the ball is coming from below
 						{
 							ball.setDY(-ball.getDY());
-							y = (int) (collidables.get(i).getY() + collidables.get(i).getHeight() + ball.getDY() + 10);
+							y = (int) (collidables.get(i).getY() + collidables.get(i).getHeight() + ball.getDY());
 							ball.setY(y);
-							//ball.setDY(-ball.getDY());
 						}
 						
 						pot += 10;
 					}	
 				}
-				/*else if(collidables.get(i).getIsTriangle())
-				{
-					if(ball.getRect().getBounds().intersectsLine(collidables.get(i).getX1(),collidables.get(i).getY1(),collidables.get(i).getX2(),collidables.get(i).getY2()))
-					{
-						if((x < WIDTH / 2))
-						{
-							if(y < HEIGHT/2)
-							{
-								ball.setDX(-ball.getDY());
-								ball.setDY(-ball.getDX());
-								x += 20;
-								y += 20;
-								ball.setX(x);
-								ball.setY(y);
-							}
-							else
-							{
-								ball.setDX(-ball.getDY());
-								ball.setDY(-ball.getDX());
-								x += 20;
-								y -= 20;
-								ball.setX(x);
-								ball.setY(y);
-								
-							}
-
-						}
-						else
-						{
-							if(y < HEIGHT/2)
-							{
-								ball.setDX(-ball.getDY());
-								ball.setDY(-ball.getDX());
-								x -= 20;
-								y += 20;
-								ball.setX(x);
-								ball.setY(y);
-							}
-							else if(y > HEIGHT/2)
-							{
-								ball.setDX(-ball.getDY());
-								ball.setDY(-ball.getDX());
-								x -=20;
-								y -=20;
-								ball.setX(x);
-								ball.setY(y);
-							}
-						}
-					}
-					
-				}*/
 				else if(collidables.get(i).getIsGoal())
 				{
 					if (ball.getRect().getBounds().intersects(collidables.get(i).getRect().getBounds()))
@@ -223,13 +171,35 @@ public class Game extends Applet implements Runnable
 						{
 							player2 += pot;
 							pot = 0;
+							x = WIDTH/2 - 10;
+							ball.setDX(0);
+							ball.setDY(0);
 						}
 						else
 						{
 							player1 += pot;
-							//pot = 0;
+							pot = 0;
+							x = WIDTH/2 + 10;
+							ball.setDX(0);
+							ball.setDY(0);
 						}
+						
+						pot = 0;
 					
+					}
+				}
+				else if(collidables.get(i).getIsPaddle())
+				{
+					if(ball.getRect().getBounds().intersectsLine(((Paddle) collidables.get(i)).getRotated()))
+					{
+						
+						//if((Paddle)collidables.get(i).getLeft())
+							x -= ball.getDX();;
+							y -= ball.getDY();;
+							ball.setX(x);
+							ball.setY(y);
+							ball.setDX(-ball.getDY());
+							ball.setDY(-ball.getDX());
 					}
 				}
 			}
@@ -301,76 +271,98 @@ public class Game extends Applet implements Runnable
 	    
 	public void paint(Graphics g)
 	{
-		//goals
+		if(gameIsOver)
+		{
+			display = false;
+			setBackground(Color.WHITE);
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Comic Sans", Font.PLAIN, 100));
+			if (player1 > player2)
+			{
+				g.drawString("Player 1 WINS!!", 50, HEIGHT/2);
+			}
+			else if (player1 < player2)
+			{
+				g.drawString("Player 2 WINS!!", 50, HEIGHT/2);
+			}
+			else
+			{
+				g.drawString("You Both Lose", 50, HEIGHT/2);
+			}
+			thread.stop();
+		}
 		
-	    g.setColor(Color.RED);
-	    g.fillRect(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
-	    g.setColor(Color.CYAN);
-	    g.fillRect(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+		if(display)
+		{
+			//goals
+			g.setColor(Color.RED);
+			g.fillRect(1326, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
+			g.setColor(Color.CYAN);
+			g.fillRect(0, 294, (int)goalDimension.getWidth(), (int)goalDimension.getHeight());
 	    
 	    
-	    //goal barriers and other
-	    g.setColor(Color.BLUE);
-	    g.fillRect(1306, 0, 60, 295);
-	    g.fillRect(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
-	    g.fillRect(0, 0, 60,295);
-	    g.fillRect(0, 294 + (int)goalDimension.getHeight(), 61, 294);
-	    g.setColor(Color.MAGENTA);
-	    g.fillOval((int)LTC.getX(), (int)LTC.getY(), LTC.getRadius()*2 , LTC.getRadius()*2);
-	    g.fillOval((int)LBC.getX(), (int)LBC.getY(), LBC.getRadius()*2 , LBC.getRadius()*2);
-	    g.fillOval((int)RTC.getX(), (int)RTC.getY(), RTC.getRadius()*2 , RTC.getRadius()*2);
-	    g.fillOval((int)RBC.getX(), (int)RBC.getY(), RBC.getRadius()*2 , RBC.getRadius()*2);
-	    g.setColor(Color.GREEN);
-	    g.fillRect((int)TR.getX(),(int)TR.getY(),(int)TR.getWidth(),(int)TR.getHeight());
-	    g.fillRect((int)BR.getX(),(int)BR.getY(),(int)BR.getWidth(),(int)BR.getHeight());
+			//goal barriers and other
+			g.setColor(Color.BLUE);
+			g.fillRect(1306, 0, 60, 295);
+			g.fillRect(1306, 294 + (int)goalDimension.getHeight(), 60, 294);
+			g.fillRect(0, 0, 60,295);
+			g.fillRect(0, 294 + (int)goalDimension.getHeight(), 61, 294);
+			g.setColor(Color.MAGENTA);
+			g.fillOval((int)LTC.getX(), (int)LTC.getY(), LTC.getRadius()*2 , LTC.getRadius()*2);
+			g.fillOval((int)LBC.getX(), (int)LBC.getY(), LBC.getRadius()*2 , LBC.getRadius()*2);
+			g.fillOval((int)RTC.getX(), (int)RTC.getY(), RTC.getRadius()*2 , RTC.getRadius()*2);
+			g.fillOval((int)RBC.getX(), (int)RBC.getY(), RBC.getRadius()*2 , RBC.getRadius()*2);
+			g.setColor(Color.GREEN);
+			g.fillRect((int)TR.getX(),(int)TR.getY(),(int)TR.getWidth(),(int)TR.getHeight());
+			g.fillRect((int)BR.getX(),(int)BR.getY(),(int)BR.getWidth(),(int)BR.getHeight());
 	    
-	    //paddles
-	    Graphics2D g2d = (Graphics2D)g;
-	    g.setColor(Color.WHITE);
-	    
-	    //paddles rotate
-	    AffineTransform old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(-LTPa),LT.getX() + LT.getWidth(), LT.getY());
-        g2d.fillRect((int) LT.getX(),(int) LT.getY(),(int) LT.getWidth(),(int) LT.getHeight());
-        g2d.setTransform(old);
+			//paddles
+			Graphics2D g2d = (Graphics2D)g;
+			g.setColor(Color.WHITE);
+			
+			//paddles rotate
+			AffineTransform old = g2d.getTransform();
+			g2d.rotate(Math.toRadians(-LTPa),LT.getX() + LT.getWidth(), LT.getY());
+			g2d.fillRect((int) LT.getX(),(int) LT.getY(),(int) LT.getWidth(),(int) LT.getHeight());
+			g2d.setTransform(old);
         
-        old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(LBPa),LB.getX() + LB.getWidth(), LB.getY() + LB.getHeight());
-        g2d.fillRect((int) LB.getX(),(int) LB.getY(),(int) LB.getWidth(),(int) LB.getHeight());
-        g2d.setTransform(old);
+			old = g2d.getTransform();
+			g2d.rotate(Math.toRadians(LBPa),LB.getX() + LB.getWidth(), LB.getY() + LB.getHeight());
+			g2d.fillRect((int) LB.getX(),(int) LB.getY(),(int) LB.getWidth(),(int) LB.getHeight());
+			g2d.setTransform(old);
+			
+			old = g2d.getTransform();
+			g2d.rotate(Math.toRadians(RTPa),RT.getX(), RT.getY());
+			g2d.fillRect((int) RT.getX(),(int) RT.getY(),(int) RT.getWidth(),(int) RT.getHeight());
+			g2d.setTransform(old);
+			
+			old = g2d.getTransform();
+			g2d.rotate(Math.toRadians(-RBPa),RB.getX(), RB.getY() + RB.getHeight());
+			g2d.fillRect((int) RB.getX(),(int) RB.getY(),(int) RB.getWidth(),(int) RB.getHeight());
+			g2d.setTransform(old);
         
-        old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(RTPa),RT.getX(), RT.getY());
-        g2d.fillRect((int) RT.getX(),(int) RT.getY(),(int) RT.getWidth(),(int) RT.getHeight());
-        g2d.setTransform(old);
-        
-        old = g2d.getTransform();
-        g2d.rotate(Math.toRadians(-RBPa),RB.getX(), RB.getY() + RB.getHeight());
-        g2d.fillRect((int) RB.getX(),(int) RB.getY(),(int) RB.getWidth(),(int) RB.getHeight());
-        g2d.setTransform(old);
-        
-        //center line
-	    g.drawLine(1366/2, 0, 1366/2, 768);
+			//center line
+			g.drawLine(1366/2, 0, 1366/2, 768);
 	    
-	    //ball
-		g.setColor(Color.GRAY);
-	    g.fillOval(x-radius,y-radius,radius*2,radius*2);
+			//ball
+			g.setColor(Color.GRAY);
+			g.fillOval(x-radius,y-radius,radius*2,radius*2);
 	    
-	    //timer
-	    g.setColor(Color.YELLOW);
-	    g.fillRect( WIDTH/2 - 22, 0, 40, 25);
-	    g.fillRect( 1240, 0, 100, 25);
-	    g.setColor(Color.BLACK);
-	    g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
-	    if (secondsPassed % 60 == 0)
-	    	g.drawString("" + minutes + ":" + "00", WIDTH/2 - 20,20);
-	    else if (seconds != 10 && seconds / 10 == 0)
-	    	g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
-	    else
-	    	g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
-	    g.drawString("Pot: " + pot,  1240 , 20 );
-	    
-
+			//timer
+			g.setColor(Color.YELLOW);
+			g.fillRect( WIDTH/2 - 22, 0, 40, 25);
+			g.fillRect( 1240, 0, 100, 25);
+			g.setColor(Color.BLACK);
+			g.setFont(new Font("Comic Sans", Font.PLAIN, 18));
+			if (secondsPassed % 60 == 0)
+				g.drawString("" + minutes + ":" + "00", WIDTH/2 - 20,20);
+			else if (seconds != 10 && seconds / 10 == 0)
+				g.drawString("" + minutes + ":" + "0" + seconds, WIDTH/2 - 20,20);
+			else
+				g.drawString("" + minutes + ":" + seconds, WIDTH/2 - 20,20);
+			g.drawString("Pot: " + pot,  1240 , 20 );
+		}
+		
 	}
 	    
 	public void update(Graphics g)
@@ -392,12 +384,8 @@ public class Game extends Applet implements Runnable
 	public void stop()
 	{
 		seconds = 0;
-		thread.stop();
+		gameIsOver = true;
 	}
-	    
-	public void destroy()
-	{
-	    	
-	}
+	   
 
 }

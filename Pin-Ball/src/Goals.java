@@ -1,5 +1,5 @@
 
-public class Goals extends GUI implements Collidable
+public class Goals extends GUI
 {
 	public Goals(int topLeftX, int topLeftY, int w, int h) {
 		super(topLeftX, topLeftY, w, h);
